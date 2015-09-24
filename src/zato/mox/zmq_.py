@@ -6,7 +6,7 @@ Copyright (C) 2014 Dariusz Suchojad <dsuch at zato.io>
 Licensed under LGPLv3, see LICENSE.txt for terms and conditions.
 """
 
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function
 
 # stdlib
 import logging
@@ -14,13 +14,19 @@ import logging
 # ZeroMQ
 import zmq
 
+# Zato
+from zato.mox.common import BaseServer, HOST
+
 class ZMQServer(object):
+
+    SERVER_TYPE = 'zmq'
+
     def __init__(self, port, socket_type):
         self.port = port
         self.socket_type = socket_type
 
     def run(self):
-        address = 'tcp://0.0.0.0:{}'.format(self.port)
+        address = 'tcp://{}:{}'.format(HOST, self.port)
 
         context = zmq.Context()
         socket = context.socket(getattr(zmq, self.socket_type))

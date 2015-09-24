@@ -26,7 +26,7 @@ setup(
       name = 'zato-mox',
       version = version,
 
-      scripts = ['src/zato/mox/console/mox'],
+      scripts = ['src/zato/mox/console/apimox'],
 
       author = 'Dariusz Suchojad',
       author_email = 'dsuch at zato.io',
