@@ -222,7 +222,10 @@ class TLSServer(BaseServer):
                 if item.startswith('qs_'):
 
                     if value:
-                        value = literal_eval(value.strip())
+                        try:
+                            value = literal_eval(value.strip())
+                        except ValueError:
+                            pass # Ok, not an int/dict or another simple value
                     else:
                         value = ''
 
