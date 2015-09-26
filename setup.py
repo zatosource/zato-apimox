@@ -26,12 +26,12 @@ setup(
       name = 'zato-apimox',
       version = version,
 
-      scripts = ['src/zato/mox/console/apimox'],
+      scripts = ['src/zato/apimox/console/apimox'],
 
       author = 'Dariusz Suchojad',
       author_email = 'dsuch at zato.io',
       url = 'https://github.com/zatosource',
-      description = 'Zato Mox',
+      description = 'Zato API Mox - Human Friendly HTTP and ZeroMQ mocks',
       long_description = LONG_DESCRIPTION,
       platforms = ['OS Independent'],
       license = 'GNU Lesser General Public License v3 (LGPLv3)',

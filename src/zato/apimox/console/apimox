@@ -3,5 +3,5 @@
 # Originally part of Zato - open-source ESB, SOA, REST, APIs and cloud integrations in Python
 # https://zato.io
 
-from zato.mox.cli import main
+from zato.apimox.cli import main
 main()

@@ -28,7 +28,7 @@ from parse import compile as parse_compile
 from validate import is_integer, VdtTypeError
 
 # Zato
-from zato.mox.common import BaseServer, HOST
+from zato.apimox.common import BaseServer
 
 # ################################################################################################################################
 
@@ -124,33 +124,52 @@ class RequestMatch(object):
 
 # ################################################################################################################################
 
-class TLSServer(BaseServer):
+class HTTPServer(BaseServer):
 
     SERVER_TYPE = 'http'
 
-    def __init__(self, port, require_certs=False, cli_params=None):
-        super(TLSServer, self).__init__(cli_params)
+    def __init__(self, needs_tls=False, require_certs=False, log_type=None, config_dir=None):
+        super(HTTPServer, self).__init__(log_type, config_dir)
+
+        config = self.config.mocks_config.apimox
+
+        if needs_tls:
+            if require_certs:
+                port = config.http_tls_client_certs_port
+            else:
+                port = config.http_tls_port
+        else:
+            port = config.http_plain_port
+
         self.port = port
+
         self._require_certs = require_certs
+        self.needs_tls = needs_tls
         self.require_certs = ssl.CERT_REQUIRED if require_certs else ssl.CERT_OPTIONAL
-        self.full_address = 'https://{}:{}'.format(HOST, self.port)
+        self.full_address = 'http{}://{}:{}'.format('s' if needs_tls else '', config.host, self.port)
         self.set_up()
 
     def run(self):
-        pem_dir = os.path.join(self.config.dir, '..', 'pem')
 
-        tls_args = {
-            'keyfile': os.path.join(pem_dir, 'server.key.pem'),
-            'certfile': os.path.join(pem_dir, 'server.cert.pem'),
-            'ca_certs': os.path.join(pem_dir, 'ca.cert.pem'),
-            'cert_reqs': self.require_certs,
-            'server_side': True,
-        }
+        tls_args = {}
 
-        logger.info('{} listening on {} (client certs: {})'.format(self.__class__.__name__,
-            self.full_address, 'required' if self._require_certs else 'optional'))
+        if self.needs_tls:
+            pem_dir = os.path.join(self.config.dir, '..', 'pem')
+            tls_args.update({
+                'keyfile': os.path.join(pem_dir, 'server.key.pem'),
+                'certfile': os.path.join(pem_dir, 'server.cert.pem'),
+                'ca_certs': os.path.join(pem_dir, 'ca.cert.pem'),
+                'cert_reqs': self.require_certs,
+                'server_side': True,
+            })
 
-        server = pywsgi.WSGIServer((HOST, self.port), self.on_request, **tls_args)
+        msg = '{}{} listening on {}'.format('TLS ' if self.needs_tls else '', self.__class__.__name__, self.full_address)
+        if self.needs_tls:
+            msg += ' (client certs: {})'.format('required' if self._require_certs else 'optional')
+
+        logger.info(msg)
+
+        server = pywsgi.WSGIServer((self.config.mocks_config.apimox.host, int(self.port)), self.on_request, **tls_args)
         server.serve_forever()
 
     def on_request(self, environ, start_response):
@@ -178,7 +197,11 @@ class TLSServer(BaseServer):
     def match(self, environ):
         matches = []
 
-        for item in self.config.mocks_config.values():
+        for name, item in self.config.mocks_config.items():
+
+            # Ignore our own config
+            if name == 'apimox':
+                continue
 
             if not item.url_path_compiled.parse(environ['PATH_INFO']):
                 continue
@@ -204,13 +227,17 @@ class TLSServer(BaseServer):
 
         if found > 1:
             return None, _PRECONDITION_FAILED, DEFAULT_CONTENT_TYPE, 'Multiple mocks matched request: {}\n'.format(
-                [m.config.name for m in conflicting])
+                sorted([m.config.name for m in conflicting]))
 
         return match.config.name, match.status, match.content_type, match.response
 
     def set_up(self):
 
         for name, config in sorted(self.config.mocks_config.items()):
+
+            # Ignore our own config
+            if name == 'apimox':
+                continue
 
             config.url_path_compiled = parse_compile(config.url_path)
 
