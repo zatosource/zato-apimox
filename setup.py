@@ -30,7 +30,7 @@ setup(
 
       author = 'Dariusz Suchojad',
       author_email = 'dsuch at zato.io',
-      url = 'https://github.com/zatosource',
+      url = 'https://zato.io/docs',
       description = 'Zato API Mox - Human Friendly HTTP and ZeroMQ mocks',
       long_description = LONG_DESCRIPTION,
       platforms = ['OS Independent'],
