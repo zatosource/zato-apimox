@@ -11,9 +11,6 @@ Licensed under LGPLv3, see LICENSE.txt for terms and conditions.
 
 from __future__ import absolute_import, division, print_function
 
-# stdlib
-import os
-
 # Zato
 from zato.apimox.http import HTTPServer
 from zato.apimox.zmq_ import ZMQServer

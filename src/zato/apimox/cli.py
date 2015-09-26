@@ -12,10 +12,7 @@ Licensed under LGPLv3, see LICENSE.txt for terms and conditions.
 from __future__ import absolute_import, division, print_function
 
 # stdlib
-import logging, os, sys, tempfile, uuid
-
-# Bunch
-from bunch import bunchify
+import os, sys, tempfile, uuid
 
 # Click
 import click
