@@ -15,7 +15,7 @@ import logging
 import zmq
 
 # Zato
-from zato.mox.common import BaseServer, HOST
+from zato.mox.common import HOST
 
 class ZMQServer(object):
 

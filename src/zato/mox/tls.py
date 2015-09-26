@@ -18,9 +18,6 @@ from traceback import format_exc
 from urlparse import parse_qs
 from uuid import uuid4
 
-# Bunch
-from bunch import Bunch
-
 # gevent
 from gevent import pywsgi
 
