@@ -23,7 +23,7 @@ def parse_requirements(requirements):
         return [line.strip('\n') for line in f if line.strip('\n') and not line.startswith('#')]
 
 setup(
-      name = 'zato-mox',
+      name = 'zato-apimox',
       version = version,
 
       scripts = ['src/zato/mox/console/apimox'],

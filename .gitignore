@@ -1,4 +1,4 @@
-mox-env/
+apimox-env/
 *.egg-info
 *.pyc
 *~

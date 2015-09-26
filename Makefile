@@ -1,7 +1,7 @@
 
 .PHONY: test
 
-ENV_NAME=mox-env
+ENV_NAME=apimox-env
 BIN_DIR=$(CURDIR)/$(ENV_NAME)/bin
 
 default: install
@@ -16,5 +16,5 @@ clean:
 	rm -rf $(CURDIR)/$(ENV_NAME)
 	rm -rf $(CURDIR)/build
 	rm -rf $(CURDIR)/dist
-	rm -rf $(CURDIR)/src/zato_mox.egg-info
+	rm -rf $(CURDIR)/src/zato_apimox.egg-info
 	find $(CURDIR) -name '*.pyc' -exec rm {} \;
