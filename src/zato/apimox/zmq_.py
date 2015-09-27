@@ -40,13 +40,13 @@ class ZMQServer(BaseServer):
 
         if self.socket_type == 'sub':
             socket.setsockopt(zmq.SUBSCRIBE, config.sub_prefix)
-            prefix_msg = '(prefix: {})'.format(config.sub_prefix or None)
+            prefix_msg = '(prefix: {}) '.format(config.sub_prefix or None)
         else:
             prefix_msg = ''
 
         socket.bind(address)
 
-        logger.info('ZMQ %s %s listening on %s', self.socket_type.upper(), prefix_msg, address)
+        logger.info('ZMQ %s %slistening on %s', self.socket_type.upper(), prefix_msg, address)
 
         while True:
             msg = socket.recv()
