@@ -17,6 +17,9 @@ import os, sys, tempfile, uuid
 # Click
 import click
 
+# Distribute
+import pkg_resources
+
 # Zato
 from zato.apimox import init as _init, run as _run
 
@@ -24,7 +27,12 @@ from zato.apimox import init as _init, run as _run
 
 _mock_types = 'http-plain', 'http-tls', 'http-tls-client-certs', 'zmq-pull', 'zmq-sub'
 
+def print_version(ctx, param, value):
+    click.echo(pkg_resources.get_distribution('zato-apimox').version)
+    ctx.exit()
+
 @click.group()
+@click.option('-v', '--version', is_flag=True, is_eager=True, expose_value=False, callback=print_version)
 def main():
     pass
 
