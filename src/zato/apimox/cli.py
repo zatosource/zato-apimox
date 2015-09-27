@@ -28,6 +28,9 @@ from zato.apimox import init as _init, run as _run
 _mock_types = 'http-plain', 'http-tls', 'http-tls-client-certs', 'zmq-pull', 'zmq-sub'
 
 def print_version(ctx, param, value):
+    if not value or ctx.resilient_parsing:
+        return
+
     click.echo(pkg_resources.get_distribution('zato-apimox').version)
     ctx.exit()
 
