@@ -103,6 +103,7 @@ class RequestMatch(object):
 
         score = 0
 
+        # Go through the request's parameters and add score for each element matching the config
         for wsgi_key, wsgi_value in self.wsgi_environ_qs.items():
             if wsgi_key in self.config.qs_values:
 
@@ -116,6 +117,16 @@ class RequestMatch(object):
                 # Config requires any value
                 else:
                     score += any_value_add
+
+        # Now go through the config and substract score for each element in config which is not present in request
+        for config_key in self.config.qs_values:
+            config_value = self.config.qs_values.get(wsgi_key, _EMPTY)
+
+            if config_key not in self.wsgi_environ_qs:
+                if config_value != _EMPTY:
+                    score -= value_add
+                else:
+                    score -= any_value_add
 
         logger.info('Score {} for `{}` ({} {})'.format(
             score, self.config.name, self.wsgi_environ['PATH_INFO'], self.wsgi_environ_qs))
