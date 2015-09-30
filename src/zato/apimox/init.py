@@ -293,9 +293,11 @@ def handle(base_path):
     # HTTP responses
     response_json_dir = os.path.join(base_path, 'http', 'response', 'json')
     response_xml_dir = os.path.join(base_path, 'http', 'response', 'xml')
+    response_txt_dir = os.path.join(base_path, 'http', 'response', 'txt')
 
     os.makedirs(response_json_dir)
     os.makedirs(response_xml_dir)
+    os.makedirs(response_txt_dir)
 
     open(os.path.join(response_json_dir, 'demo1.json'), 'w').write('{"Welcome to apimox":"How\'s things?"}\n')
     open(os.path.join(response_json_dir, 'demo2.json'), 'w').write('{"Isn\'t apimox great?":"Sure it is!"}\n')
