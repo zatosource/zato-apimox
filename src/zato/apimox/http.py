@@ -326,12 +326,19 @@ class HTTPServer(BaseServer):
     def get_qs_values(self, config):
         qs_values = {}
         for item, value in config.items():
+
             if item.startswith('qs_'):
 
                 if value:
+
+                    # This is needed because there can be a comma in query string
+                    # which ConfigObj turned into a list, so we now need to convert it back to string.
+                    if isinstance(value, list):
+                        value = ','.join(value)
+
                     try:
                         value = literal_eval(value.strip())
-                    except ValueError:
+                    except(SyntaxError, ValueError):
                         pass # Ok, not an int/dict or another simple value
                 else:
                     value = ''
