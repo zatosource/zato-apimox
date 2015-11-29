@@ -418,6 +418,6 @@ class HTTPServer(BaseServer):
             config.resp_headers = self.get_resp_headers(config)
 
             qs_info = '(qs: {})'.format(config.qs_values)
-            logger.info('Mounting `{}` on {}{} {}'.format(name, self.full_address, config.url_path, qs_info))
+            logger.info('`{}`: {}{} {}'.format(name, self.full_address, config.url_path, qs_info))
 
 # ################################################################################################################################

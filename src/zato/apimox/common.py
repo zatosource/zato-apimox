@@ -49,7 +49,7 @@ class BaseServer(object):
         rfh.setLevel(log_level)
         sh.setLevel(log_level)
 
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        formatter = logging.Formatter('%(asctime)s %(name)s %(message)s', '%Y-%m-%d %H:%M:%S')
 
         rfh.setFormatter(formatter)
         sh.setFormatter(formatter)
