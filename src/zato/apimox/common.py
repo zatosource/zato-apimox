@@ -32,8 +32,22 @@ class BaseServer(object):
 
     def get_mocks_config(self, config_dir):
         self.config.dir = os.path.abspath(os.path.join(os.path.expanduser(config_dir), self.SERVER_TYPE))
-        config_path = os.path.join(self.config.dir, 'config.ini')
-        return bunchify(ConfigObj(open(config_path)))
+        base_config_path = os.path.join(self.config.dir, 'config.ini')
+        base_config = ConfigObj(open(base_config_path))
+
+        config_paths = open(base_config_path).readlines()
+
+        include = base_config.get('apimox', {}).get('include')
+        if include:
+            base_config_dir = os.path.dirname(base_config_path)
+
+            if isinstance(include, list):
+                for name in include:
+                    config_paths.extend(open(os.path.abspath(os.path.join(base_config_dir, name))).readlines())
+            else:
+                config_paths.extend(open(os.path.abspath(os.path.join(base_config_dir, include))).readlines())
+
+        return bunchify(ConfigObj(config_paths))
 
     def setup_logging(self):
         config = self.config.mocks_config.apimox
